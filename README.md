@@ -1,4 +1,4 @@
-Free/Libre Open Source Software Inruder/Fire Alarm System for Athens Hackerspace
+Free/Libre Open Source Software Inruder & Fire Alarm System for Athens Hackerspace
 
 ### Getting Started
 Download
