@@ -1,5 +1,5 @@
 /*  
-    alarm.ino - hsgr digispark based alarm prototype
+    floss-alarm.ino - hsgr digispark based alarm prototype
     
     Copyright (C) 2016 Sotirios Vrachas <sotirios@vrachas.com>
     
