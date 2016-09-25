@@ -1,4 +1,7 @@
-#define BD_size 1  //number of I-buttons allowed to open the door
+#define BD_size 2  //number of I-buttons allowed to arm/disarm the alarm
 
-//in this matrix put the IDs allowed to enter the door
-byte keys[BD_size][8] = {{0,0,0,0,0,0,0,0}}; //Add more keys in this array
+//in this matrix put the IDs allowed to arm/disarm the alarm
+byte keys[BD_size][8] = {
+                          {0,0,0,0,0,0,0,0},
+                          {0,0,0,0,0,0,0,1}
+                        }; //Add more keys in this array
