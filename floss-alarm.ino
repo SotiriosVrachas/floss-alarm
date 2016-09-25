@@ -40,10 +40,10 @@ void loop(){
       if (detect_intruder()){
         delay(entry_delay); //Time to enter and disarm
         if(check_arm()){
-          alert();
+          alert(intrudersensors);
         }
       } else if(detect_fire()){
-        alert();
+        alert(firesensors);
       }
     }
   } else {
@@ -53,9 +53,12 @@ void loop(){
   }
 }
  
-void alert(init zone){
+void alert(int zone){
   digitalWrite(sirens, HIGH);
-  //Send SMS to operators
+  
+  //Send SMS to operators including zone.
+  //TODO: Add function with AT Comands loop here 
+  
   while(check_arm()){
     delay(100);
   }
