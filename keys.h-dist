@@ -1,0 +1,4 @@
+#define BD_size 1  //number of I-buttons allowed to open the door
+
+//in this matrix put the IDs allowed to enter the door
+byte keys[BD_size][8] = {{0,0,0,0,0,0,0,0}}; //Add more keys in this array

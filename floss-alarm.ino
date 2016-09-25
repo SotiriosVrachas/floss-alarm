@@ -17,76 +17,103 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <OneWire.h>
+#include "keys.h"
+#include "config.h"
+
+boolean g_armed;
+
+OneWire ds(onewire);  // OneWire read pin
+
 void setup(){
-  pinMode(0, INPUT);  //Perimeter Sensors
-  pinMode(1, OUTPUT); //Alarm
-  pinMode(2, INPUT);  //Keypad
-  pinMode(3, INPUT);  //Fire Sensors
-  pinMode(4, INPUT);  //Fire Alarm Suspend/Fire Test
+  pinMode(intrudersensors, INPUT);  //Perimeter Sensors
+  pinMode(sirens, OUTPUT); //Alarm
+  pinMode(firesensors, INPUT);  //Fire Sensors
+  pinMode(firebutton, INPUT_PULLUP);  //Fire Alarm Suspend/Fire Test
+  pinMode(tamper, INPUT);  //Fire Alarm Suspend/Fire Test
 }
  
 void loop(){
-  if(check_arm() == true){
-    delay(10000); //Time to arm and leave
-    while(check_arm() == true){
-      if (detect_breach() == true){
-        delay(10000); //Time to enter and disarm
-        if(check_arm() == true){
+  if(check_arm()){
+    delay(exit_delay); //Time to arm and leave
+    while(check_arm()){
+      if (detect_intruder()){
+        delay(entry_delay); //Time to enter and disarm
+        if(check_arm()){
           alert();
         }
-      } else if(detect_fire() == true){
+      } else if(detect_fire()){
         alert();
       }
     }
-  }
-  
-  if(detect_fire() == true){
-    fire_alarm();
+  } else {
+    if(detect_fire()){
+      fire_alarm();
+    }
   }
 }
  
-void alert(){
-  digitalWrite(1, HIGH);
-  while(check_arm() == true){
+void alert(init zone){
+  digitalWrite(sirens, HIGH);
+  //Send SMS to operators
+  while(check_arm()){
+    delay(100);
   }
-  digitalWrite(1, LOW);
+  digitalWrite(sirens, LOW);
 }
 
 void fire_alarm(){
-  digitalWrite(1, HIGH);
-  while(check_fire_button() == false){
+  digitalWrite(sirens, HIGH);
+  while(check_fire_button()){
+    delay(100);
   }
-  digitalWrite(1, LOW);
+  digitalWrite(sirens, LOW);
 }
 
-boolean detect_breach() {
-  if(digitalRead(0) == LOW){
-    return 1;
-  } else {
-    return 0;
-  }
+boolean detect_intruder() {
+  return (digitalRead(intrudersensors) == LOW);
 }
 
 boolean check_arm(){
-  if(digitalRead(2) == HIGH){
-    return 1;
-  } else {
-    return 0;
+  int permited = 0;
+  byte id[8] = { 0, 0, 0, 0, 0, 0, 0, 0};
+  
+  if ( !ds.search(id)) {
+    ds.reset_search();
+    delay(100);
+    return g_armed;
+  }
+
+  //Go through keys permitted for an ID match
+  for(int k = 0; k < BD_size; k++) {
+    permited=0;
+
+    //Verify if there is a match
+    for(int b = 0; b < 8; b++) {
+      if(keys[k][b]==id[b]){
+         permited++;
+      }
+    }
+    if(permited==8){
+      g_armed = toggle(g_armed); // Arm/Disarm the alarm
+      permited=0;
+      for(int b = 0; b < 8; b++) {
+      id[b]=B0000000;}
+      return g_armed; 
+    }
+    else if(k==BD_size-1) // No match found
+      return true; //Wrong key, exit_delay/1000 seconds to leave.
   }
 }
 
 boolean check_fire_button(){
-  if(digitalRead(4) == HIGH){
-    return 1;
-  } else {
-    return 0;
-  }
+  return toggle(digitalRead(firebutton) == LOW);
 }
 
 boolean detect_fire(){
-  if(digitalRead(3) == LOW){
-    return 1;
-  } else {
-    return 0;
-  }
+    return (digitalRead(firesensors) == HIGH);
+}
+
+boolean toggle(boolean x){
+    return (!x);
 }
