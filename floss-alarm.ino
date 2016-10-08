@@ -22,7 +22,6 @@
 #include "config.h"
 
 boolean g_armed;
-unsigned long flashTimeMark = 0;
 
 //status, time
 long unsigned int zones_stat[zones_size][2];
@@ -53,11 +52,11 @@ boolean is_safe(int z) {
 
 void alarm() {
   for (int z = 0; z < zones_size; z++) {
-    if ((!is_safe(z) || zones_stat[z][0]) && IsTime(&zones_stat[z][1], zones[z][3]) && (!zones[z][5] || (zones[z][5] && check_arm())) && (!zones[z][6] || (zones[z][5] && isAdmin()))) {
+    if ((!is_safe(z) || zones_stat[z][0]) && IsTime(&zones_stat[z][1], zones[z][3]) && (!zones[z][5] || (zones[z][5] && check_arm())) && (!zones[z][6] || (zones[z][6] && isAdmin()))) {
       alert(zone_names[z]);
     }
   }
-  if (check_arm()) {
+  /*if (check_arm()) {
     if (IsTime(&flashTimeMark, exit_delay)) {
       while (check_arm()) {
         if (detect_intruder()) {
@@ -70,14 +69,14 @@ void alarm() {
         }
       }
     }
-  } else {
+    } else {
     if (detect_fire()) {
       fire_alarm();
     }
-  }
+    }*/
 }
 
-void alert(int zone) {
+void alert(const char * zone) {
   digitalWrite(sirens, HIGH);
 
   //Send SMS to operators including zone.
@@ -89,17 +88,13 @@ void alert(int zone) {
   digitalWrite(sirens, LOW);
 }
 
-void fire_alarm() {
+/*void fire_alarm() {
   digitalWrite(sirens, HIGH);
   while (check_fire_button()) {
     delay(100);
   }
   digitalWrite(sirens, LOW);
-}
-
-boolean detect_intruder() {
-  return (digitalRead(intrudersensors) == LOW);
-}
+}*/
 
 boolean check_arm() {
   int permited = 0;
@@ -134,20 +129,26 @@ boolean check_arm() {
   }
 }
 
-boolean check_fire_button() {
-  return toggle(digitalRead(firebutton) == LOW);
-}
+/*
+  boolean detect_intruder() {
+  return (digitalRead(intrudersensors) == LOW);
+  }
 
-boolean detect_fire() {
+  boolean check_fire_button() {
+  return toggle(digitalRead(firebutton) == LOW);
+  }
+
+  boolean detect_fire() {
   return (digitalRead(firesensors) == HIGH);
+  }
+*/
+
+boolean toggle(boolean x) {
+  return (!x);
 }
 
 boolean isAdmin() {
   return true;
-}
-
-boolean toggle(boolean x) {
-  return (!x);
 }
 
 boolean IsTime(unsigned long *timeMark, int timeInterval) {

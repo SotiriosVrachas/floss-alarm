@@ -18,10 +18,8 @@ https://pad.hackerspace.gr/p/alarm
 
 #### Wanted features
 TODO: Function that sends sms (modem specific)
+TODO: Function isAdmin()
 
-TODO: Convert single pin detection to array scan (hardware specific if an extender is used)
-
-TODO: Incorporate Tamper, Fire, Intruder and Entry Zones Groups into the main loop.
 
 ### Contributor list
 Sotirios Vrachas

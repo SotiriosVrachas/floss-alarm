@@ -8,7 +8,7 @@
 #define exit_delay 10000 //Time to arm and leave
 #define entry_delay 10000 //Time to enter and disarm
 
-#define zones_size 6  //number of zones
+#define zones_size 5  //number of zones
 
 // in this matrix configure the zones
 // pin, mode, safevalue, delay1, delay2, armedonly, admin
@@ -20,10 +20,11 @@ static int zones[zones_size][7] = {
   {1, INPUT, 0, 10000, 10000, 1, 0}
 };
 
-static int char zone_names[zones_size][0] = {
-  {"fire but"},
-  {"tamper zone"},
-  {"fire zone"},
-  {"siren"},
-  {"perimeter"}
+
+static char zone_names[zones_size][20] = {
+  {"Fire button"},
+  {"Zone 1 tamper"},
+  {"Zone 2 fire"},
+  {"Siren"},
+  {"Zone 3 perimeter"}
 };
