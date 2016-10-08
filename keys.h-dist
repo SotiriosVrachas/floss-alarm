@@ -2,6 +2,6 @@
 
 //in this matrix put the IDs allowed to arm/disarm the alarm
 byte keys[BD_size][8] = {
-                          {0,0,0,0,0,0,0,0},
-                          {0,0,0,0,0,0,0,1}
-                        }; //Add more keys in this array
+  {0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 1}
+}; //Add more keys in this array
